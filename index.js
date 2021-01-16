@@ -49,6 +49,16 @@ let heroku = {
       );
     }
 
+    // Check if Repo clone is shallow
+    const isShallow = execSync(
+      "git rev-parse --is-shallow-repository"
+    ).toString();
+
+    // If the Repo clone is shallow, make it unshallow
+    if (isShallow === "true\n") {
+      execSync("git fetch --prune --unshallow");
+    }
+
     execSync(createCatFile(heroku));
     console.log("Created and wrote to ~/.netrc");
     execSync("heroku login");
